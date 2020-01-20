@@ -1,0 +1,196 @@
+metric_name,metric_type,interval,unit_name,per_unit_name,description,orientation,integration,short_name
+ignite.threads.active,Approximate number of threads that are actively executing tasks.
+ignite.threads.pool_size,Current number of threads in the pool.
+ignite.threads.largest_size,Largest number of threads that have ever simultaneously been in the pool.
+ignite.threads.tasks,Approximate total number of tasks that have been scheduled for execution.
+ignite.threads.completed_tasks,Approximate total number of tasks that have completed execution.
+ignite.threads.queue_size,Current number of threads in the pool
+ignite.threads.core_pool_size,The core number of threads.
+ignite.threads.maximum_pool_size,The maximum allowed number of threads.
+ignite.allocation_rate,Allocation rate (pages per second) averaged across rateTimeInternal.
+ignite.initial_memory_size,Initial memory region size defined by its data region.
+ignite.max_memory_size,Maximum memory region size defined by its data region.
+ignite.offheap_size,Offheap size in bytes.
+ignite.total_allocated_pages,Total number of allocated pages.
+ignite.eviction_rate,Eviction rate (pages per second).
+ignite.large_entries_pages_percentage,Percentage of pages that are fully occupied by large entries that go beyond page size.
+ignite.pages_fill_factor,The percentage of the used space.
+ignite.dirty_pages,Number of pages in memory not yet synchronized with persistent storage.
+ignite.pages_replace_rate,Rate at which pages in memory are replaced with pages from persistent storage (pages per second).
+ignite.physical_memory_pages,Number of pages residing in physical RAM.
+ignite.pages_replace_age,Average age at which pages in memory are replaced with pages from persistent storage (milliseconds).
+ignite.pages_read,Number of pages read from last restart.
+ignite.pages_written,Number of pages written from last restart.
+ignite.pages_replaced,Number of pages replaced from last restart.
+ignite.offheap_used_size,Total used offheap size in bytes.
+ignite.total_allocated_size,Total size of memory allocated in bytes.
+ignite.used_checkpoint_buffer_pages,Used checkpoint buffer size in pages.
+ignite.used_checkpoint_buffer_size,Used checkpoint buffer size in bytes.
+ignite.check_point_buffer_size,Total size in bytes for checkpoint buffer.
+ignite.total_started_threads,The total number of threads started.
+ignite.heap_memory_initialized,The initial size of memory in bytes; -1 if undefined.
+ignite.heap_memory_maximum,The maximum amount of memory in bytes; -1 if undefined.
+ignite.received_bytes,Received bytes count.
+ignite.oubound_messages_queue_size,Outbound messages queue size.
+ignite.sent_messages,Sent messages count.
+ignite.sent_bytes,Sent bytes count.
+ignite.received_messages,Received messages count.
+ignite.total_cpus,The number of CPUs available to the Java Virtual Machine.
+ignite.non_heap_memory_initialized,The initial size of non-heap memory in bytes; -1 if undefined.
+ignite.non_heap_memory_used,Current non-heap memory size that is used by Java VM.
+ignite.non_heap_memory_committed,Amount of non-heap memory in bytes that is committed for the JVM to use.
+ignite.non_heap_memory_maximum,Maximum amount of non-heap memory in bytes that can be used for memory management. -1 if undefined.
+ignite.current_gc_load,Average time spent in GC since the last update.
+ignite.heap_memory_used,Current heap size that is used for object allocation.
+ignite.heap_memory_committed,The amount of committed memory in bytes.
+ignite.current_cpu_load,The system load average; or a negative value if not available.
+ignite.average_cpu_load,Average of CPU load values over all metrics kept in the history.
+ignite.total_nodes,Total number of nodes.
+ignite.jobs.active.maximum,Maximum number of jobs that ever ran concurrently on this node.
+ignite.jobs.active.current,Number of currently active jobs concurrently executing on the node.
+ignite.jobs.active.average,Average number of active jobs concurrently executing on the node.
+ignite.jobs.waiting.maximum,Maximum number of waiting jobs this node had.
+ignite.jobs.waiting.current,Number of queued jobs currently waiting to be executed.
+ignite.jobs.waiting.average,Average number of waiting jobs this node had queued.
+ignite.jobs.rejected.maximum,Maximum number of jobs rejected at once during a single collision resolution operation.
+ignite.jobs.rejected.current,Number of jobs rejected after more recent collision resolution operation.
+ignite.jobs.rejected.average,Average number of jobs this node rejects during collision resolution operations.
+ignite.jobs.rejected.total,Total number of jobs this node rejects during collision resolution operations since node startup.
+ignite.jobs.cancelled.maximum,Maximum number of cancelled jobs this node ever had running concurrently.
+ignite.jobs.cancelled.current,Number of cancelled jobs that are still running.
+ignite.jobs.cancelled.average,Average number of cancelled jobs this node ever had running concurrently.
+ignite.jobs.cancelled.total,Total number of cancelled jobs since node startup.
+ignite.jobs.executed.total,Total number of jobs handled by the node.
+ignite.jobs.execution_time.total,Total time all finished jobs takes to execute on the node.
+ignite.jobs.wait_time.maximum,Maximum time a job ever spent waiting in a queue to be executed.
+ignite.jobs.wait_time.current,Current wait time of oldest job.
+ignite.jobs.wait_time.average,Average time jobs spend waiting in the queue to be executed.
+ignite.jobs.execute_time.maximum,Time it took to execute the longest job on the node.
+ignite.jobs.execute_time.current,Longest time a current job has been executing for.
+ignite.jobs.execute_time.average,Average time a job takes to execute on the node.
+ignite.total_executed_tasks,Total number of tasks handled by the node.
+ignite.total_busy_time,Total time this node spent executing jobs.
+ignite.total_idle_time,Total time this node spent idling (not executing any jobs).
+ignite.current_idle_time,Time this node spend idling since executing last job.
+ignite.busy_time_percentage,Percentage of time this node is busy executing jobs vs. idling.
+ignite.idle_time_percentage,Percentage of time this node is idling vs. executing jobs.
+ignite.heap_memory_total,The total amount of memory in bytes; -1 if undefined.
+ignite.non_heap_memory_total,Total amount of non-heap memory in bytes that can be used for memory management. -1 if undefined.
+ignite.current_thread_count,Current number of live threads.
+ignite.maximum_thread_count,The peak live thread count.
+ignite.current_daemon_thread_count,Current number of live daemon threads.
+ignite.total_baseline_nodes,Total baseline nodes count.
+ignite.active_baseline_nodes,Active baseline nodes count.
+ignite.total_server_nodes,Server nodes count.
+ignite.total_client_nodes,Client nodes count.
+ignite.jobs.maximum_failover,Maximum number of attempts to execute a failed job on another node.
+ignite.jobs.total_failover,Total number of jobs that were failed over.
+ignite.transaction.committed,The number of transactions which were committed.
+ignite.transaction.rolledback,The number of transactions which were rollback.
+ignite.transaction.holding_lock,The number of active transactions holding at least one key lock.
+ignite.transaction.locked_keys,The number of keys locked on the node.
+ignite.transaction.owner,The number of active transactions for which this node is the initiator.
+ignite.wal.archive_segments,Current number of WAL segments in the WAL archive.
+ignite.wal.logging_rate,Average number of WAL records per second written during the last time interval.
+ignite.wal.writing_rate,Average number of bytes per second written during the last time interval.
+ignite.wal.buffer_poll_spin,WAL buffer poll spins number over the last time interval.
+ignite.wal.fsync_average,Average WAL fsync duration in microseconds over the last time interval.
+ignite.wal.total_size,Total size in bytes for storage wal files.
+ignite.wal.last_rollover,Time of the last WAL segment rollover.
+ignite.checkpoint.last_lock_wait_duration,Duration of the checkpoint lock wait in milliseconds.
+ignite.checkpoint.last_mark_duration,Duration of the checkpoint mark in milliseconds.
+ignite.checkpoint.last_pages_write_duration,Duration of the checkpoint pages write in milliseconds.
+ignite.checkpoint.last_fsync_duration,Duration of the sync phase of the last checkpoint in milliseconds.
+ignite.checkpoint.last_total_pages,Total number of pages written during the last checkpoint.
+ignite.checkpoint.last_data_pages,Total number of data pages written during the last checkpoint.
+ignite.checkpoint.last_copied_on_write_pages,Number of pages copied to a temporary checkpoint buffer during the last checkpoint.
+ignite.checkpoint.last_duration,Duration of the last checkpoint in milliseconds.
+ignite.checkpoint.total_time,Total checkpoint time from last restart.
+ignite.discovery.message_worker_queue_size,Message worker queue current size.
+ignite.discovery.nodes_joined,Nodes joined count.
+ignite.discovery.nodes_left,Nodes left count.
+ignite.discovery.nodes_failed,Nodes failed count.
+ignite.discovery.pending_messages_registered,Pending messages registered.
+ignite.discovery.pending_messages_discarded,Pending messages discarded.
+ignite.discovery.average_message_processing_time,Avg message processing time.
+ignite.discovery.max_message_processing_time,Max message processing time.
+ignite.discovery.total_received_messages,Total received messages count.
+ignite.discovery.total_processed_messages,Total processed messages count.
+ignite.cache.cluster_moving_partitions,Count of partitions for this cache group in the entire cluster with state MOVING.
+ignite.cache.minimum_partition_copies,Minimum number of partition copies for all partitions of this cache group.
+ignite.cache.maximum_partition_copies,Maximum number of partition copies for all partitions of this cache group.
+ignite.cache.local_owning_partitions,Count of partitions with state OWNING for this cache group located on this node.
+ignite.cache.local_moving_partitions,Count of partitions with state MOVING for this cache group located on this node.
+ignite.cache.local_renting_partitions,Count of partitions with state RENTING for this cache group located on this node.
+ignite.cache.local_renting_entries,Count of entries remains to evict in RENTING partitions located on this node for this cache group.
+ignite.cache.cluster_owning_partitions,Count of partitions for this cache group in the entire cluster with state OWNING.
+ignite.cache.backups,Count of backups configured for cache group.
+ignite.cache.partitions,Count of partitions for cache group.
+ignite.cache.size,Number of non-null values in the cache as a long value.
+ignite.cache.gets,The total number of gets to the cache.
+ignite.cache.removals,The total number of removals from the cache.
+ignite.cache.puts,The total number of puts to the cache.
+ignite.cache.hits,The number of get requests that were satisfied by the cache.
+ignite.cache.misses,A miss is a get request that is not satisfied.
+ignite.cache.offheap_allocated_size,Memory size allocated in off-heap.
+ignite.cache.hit_percentage,Percentage of successful hits.
+ignite.cache.miss_percentage,Percentage of accesses that failed to find anything.
+ignite.cache.evictions,Number of eviction entries.
+ignite.cache.average_get_time,Average time to execute get.
+ignite.cache.average_put_time,Average time to execute put.
+ignite.cache.average_remove_time,Average time to execute remove.
+ignite.cache.average_commit_time,Average time to commit transaction.
+ignite.cache.average_rollback_time,Average time to rollback transaction.
+ignite.cache.commits,Number of transaction commits.
+ignite.cache.rollbacks,Number of transaction rollback.
+ignite.cache.offheap_gets,Number of gets from off-heap memory.
+ignite.cache.offheap_puts,Number of puts to off-heap memory.
+ignite.cache.offheap_removals,Number of removed entries from off-heap memory.
+ignite.cache.offheap_evictions,Number of evictions from off-heap memory.
+ignite.cache.offheap_hits,Number of hits on off-heap memory.
+ignite.cache.offheap_hit_percentage,Percentage of hits on off-heap memory.
+ignite.cache.offheap_misses,Number of misses on off-heap memory.
+ignite.cache.offheap_miss_percentage,Percentage of misses on off-heap memory.
+ignite.cache.heap_entries,Number of entries in heap memory.
+ignite.cache.offheap_entries,Number of entries stored in off-heap memory.
+ignite.cache.offheap_primary_entries,Number of primary entries stored in off-heap memory.
+ignite.cache.offheap_backup_entries,Number of backup stored in off-heap memory.
+ignite.cache.evict_queue_size,Current size of evict queue.
+ignite.cache.thread_map_size,Transaction per-thread map size.
+ignite.cache.xid_map_size,Transaction per-Xid map size.
+ignite.cache.commit_queue_size,Transaction committed queue size.
+ignite.cache.prepare_queue_size,Transaction prepared queue size.
+ignite.cache.start_version_counts_size,Transaction start version counts map size.
+ignite.cache.committed_versions_size,Transaction committed ID map size.
+ignite.cache.rolledback_versions_size,Transaction rolled back ID map size.
+ignite.cache.dht_thread_map_size,Transaction DHT per-thread map size.
+ignite.cache.dht_xid_map_size,Transaction DHT per-Xid map size.
+ignite.cache.dht_commit_queue_size,Transaction DHT committed queue size.
+ignite.cache.dht_prepare_queue_size,Transaction DHT prepared queue size.
+ignite.cache.dht_start_version_counts_size,Transaction DHT start version counts map size.
+ignite.cache.dht_committed_versions_size,Transaction DHT committed ID map size.
+ignite.cache.dht_rolledback_versions_size,Transaction DHT rolled back ID map size.
+ignite.cache.write_behind_store_batch_size,Maximum size of batch for similar operations.
+ignite.cache.write_behind_overflow_total,Count of cache overflow events since write-behind cache has started.
+ignite.cache.write_behind_overflow,Count of write buffer overflow events in progress at the moment.
+ignite.cache.write_behind_retries,Count of cache entries that are currently in retry state.
+ignite.cache.write_behind_buffer_size,Count of cache entries that are waiting to be flushed.
+ignite.cache.entry_processor.puts,"The total number of cache invocations, caused update."
+ignite.cache.entry_processor.removals,"The total number of cache invocations, caused removals."
+ignite.cache.entry_processor.read_only_invocations,"The total number of cache invocations, caused no updates."
+ignite.cache.entry_processor.invocations,The total number of cache invocations.
+ignite.cache.entry_processor.hits,"The total number of invocations on keys, which exist in cache."
+ignite.cache.entry_processor.hit_percentage,"The percentage of invocations on keys, which exist in cache."
+ignite.cache.entry_processor.misses,"The total number of invocations on keys, which don't exist in cache."
+ignite.cache.entry_processor.miss_percentage,"The percentage of invocations on keys, which don't exist in cache."
+ignite.cache.entry_processor.average_invocation_time,The mean time to execute cache invokes.
+ignite.cache.entry_processor.minimum_invocation_time,"So far, the minimum time to execute cache invokes."
+ignite.cache.entry_processor.maximum_invocation_time,"So far, the maximum time to execute cache invokes."
+ignite.cache.total_partitions,Total number of partitions on current node.
+ignite.cache.rebalancing_partitions,Number of currently rebalancing partitions on current node.
+ignite.cache.rebalanced_keys,Number of already rebalanced keys.
+ignite.cache.estimated_rebalancing_keys,Number estimated to rebalance keys.
+ignite.cache.keys_to_rebalance,Estimated number of keys to be rebalanced on current node.
+ignite.cache.rebalancing_keys_rate,Estimated rebalancing speed in keys.
+ignite.cache.rebalancing_bytes_rate,Estimated rebalancing speed in bytes.
+ignite.cache.rebalance_clearing_partitions,Number of partitions need to be cleared before actual rebalance start.
