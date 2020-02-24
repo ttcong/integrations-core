@@ -150,7 +150,14 @@ init_config:
   ## Read http://docs.datadoghq.com/integrations/java/ to learn how to customize it
   ## Agent 5: Customize all your metrics below
   ## Agent 6: The default metrics to be collected are kept in metrics.yaml, but you can still add your own metrics here
-  #
+  conf:
+    - include:
+        attribute:
+          Value:
+            alias: $domain.$type.$name
+            metric_type: gauge
+        domain_regex: kafka\..*
+
 #  conf:
 #    ##
 #    ## Producers (only v0.8.2.x)
