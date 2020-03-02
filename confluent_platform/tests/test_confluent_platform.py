@@ -2,6 +2,7 @@
 # All rights reserved
 # Licensed under a 3-clause BSD style license (see LICENSE)
 from datadog_checks.confluent_platform import ConfluentPlatformCheck
+from .common import build_metadata_csv
 
 
 def test_check(aggregator):
@@ -10,3 +11,6 @@ def test_check(aggregator):
     check.check(instance)
 
     aggregator.assert_all_metrics_covered()
+
+    build_metadata_csv()
+    1/0
