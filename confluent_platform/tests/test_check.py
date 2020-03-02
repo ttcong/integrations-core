@@ -9,7 +9,7 @@ from .common import ACTIVEMQ_E2E_METRICS
 
 
 @pytest.mark.e2e
-def test(dd_agent_check):
+def test_e2e(dd_agent_check):
     instance = {}
     aggregator = dd_agent_check(instance)
 
