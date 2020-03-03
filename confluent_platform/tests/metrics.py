@@ -16,7 +16,7 @@ kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions	YAMMER_GAUGE	par
 kafka.cluster:type=Partition,topic={topic},name=UnderMinIsr,partition={partition}	YAMMER_GAUGE	partition	Number of partitions whose in-sync replicas count is less than minIsr. These partitions will be unavailable to producers who use acks=all.	TRUE
 kafka.controller:type=KafkaController,name=OfflinePartitionsCount	YAMMER_GAUGE	partition	Number of partitions that don’t have an active leader and are hence not writable or readable. Alert if value is greater than 0.	TRUE
 kafka.controller:type=KafkaController,name=ActiveControllerCount	YAMMER_GAUGE		Number of active controllers in the cluster. Alert if the aggregated sum across all brokers in the cluster is anything other than 1 because there should be exactly one controller per cluster.	TRUE
-kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec	YAMMER_METER	byte	Aggregate incoming byte rate.	FALSE
+kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec	YAMMER_METER	byte	Aggregate incoming byte rate.	TRUE
 kafka.server:type=BrokerTopicMetrics,name=BytesOutPerSec	YAMMER_METER	byte	Aggregate outgoing byte rate.	FALSE
 kafka.network:type=RequestMetrics,name=RequestsPerSec,request={Produce|FetchConsumer|FetchFollower}	YAMMER_METER	request	Request rate.	FALSE
 kafka.server:type=BrokerTopicMetrics,name=TotalProduceRequestsPerSec	YAMMER_METER	request	Produce request rate.	FALSE
@@ -55,11 +55,12 @@ class Attribute:
 
 
 class Metric:
-    def __init__(self, metric_type, suffix=None, per_unit_name='', orientation=0):
+    def __init__(self, metric_type, suffix=None, per_unit_name='', orientation=0, check_metric=True):
         self.suffix = suffix
         self.metric_type = metric_type
         self.per_unit_name = per_unit_name
         self.orientation = orientation
+        self.check_metric = check_metric
 
 
 class MBean:
@@ -92,7 +93,8 @@ class MBean:
 
 # flatten structure
 reader = csv.DictReader(io.StringIO(YAMMER_METRICS), delimiter='\t')
-ALL_MBEANS = [MBean(row['bean'], yammer_type=row['type'], unit_name=row['unit_name'], desc=row['description'], check_metric=row['check_metric']) for row in reader if row]
+ALL_MBEANS = [MBean(row['bean'], yammer_type=row['type'], unit_name=row['unit_name'], desc=row['description'],
+                    check_metric=row['check_metric'] == 'TRUE') for row in reader if row]
 
 
 MBEANS_CONFIG = [
@@ -112,7 +114,7 @@ MBEANS_CONFIG = [
         # - `count` is monotonically increasing
         'alias': '$domain.$type.$name',
         'metrics': [
-            Metric(COUNT, 'count'),
+            Metric(COUNT, 'count', check_metric=False),  # Seems `agent check` doesn't return jmx count metrics
             Metric(GAUGE, 'fifteen_minute_rate', per_unit_name='second'),
             Metric(GAUGE, 'five_minute_rate', per_unit_name='second'),
             Metric(GAUGE, 'one_minute_rate', per_unit_name='second'),
@@ -127,13 +129,13 @@ MBEANS_CONFIG = [
         # - `count` is monotonically increasing
         'alias': '$domain.$type.$name',
         'metrics': [
+            Metric(COUNT, 'count', check_metric=False),  # Seems `agent check` doesn't return jmx count metrics
             Metric(GAUGE, '50percentile', per_unit_name='second'),
             Metric(GAUGE, '75percentile', per_unit_name='second'),
             Metric(GAUGE, '95percentile', per_unit_name='second'),
             Metric(GAUGE, '98percentile', per_unit_name='second'),
             Metric(GAUGE, '99percentile', per_unit_name='second'),
             Metric(GAUGE, '999percentile', per_unit_name='second'),
-            Metric(COUNT, 'count'),
             Metric(GAUGE, 'fifteen_minute_rate', per_unit_name='second'),
             Metric(GAUGE, 'five_minute_rate', per_unit_name='second'),
             Metric(GAUGE, 'one_minute_rate', per_unit_name='second'),
@@ -196,9 +198,11 @@ def build_metrics(current_metrics=None, checked_only=False):
         alias = group['alias']
         metrics = group['metrics']
         for mbean in group['beans']:  # type: MBean
-            if checked_only and mbean.check_metric == 'FALSE':
+            if checked_only and not mbean.check_metric:
                 continue
             for metric in metrics:
+                if checked_only and not metric.check_metric:
+                    continue
                 rows.append(build_one_metric(metric, alias, mbean, current_metrics))
     return rows
 

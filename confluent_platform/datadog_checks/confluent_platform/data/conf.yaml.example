@@ -151,24 +151,35 @@ init_config:
   ## Agent 5: Customize all your metrics below
   ## Agent 6: The default metrics to be collected are kept in metrics.yaml, but you can still add your own metrics here
   conf:
-    - include:
-        # class_regex
-        attribute:
-          Value:
-            alias: $domain.$type.$name
-            metric_type: gauge
-          Count:
-            alias: $domain.$type.$name.count
-            metric_type: rate
-          99thPercentile:
-            alias: $domain.$type.$name.99percentile
-            metric_type: gauge
-          Mean:
-            alias: $domain.$type.$name.avg
-            metric_type: gauge
-        domain_regex: kafka\..*
-      exclude:
-        bean:
-          # Following metrics use type Gauge, but doesn't have numeric value
-          - kafka.server:type=SessionExpireListener,name=SessionState
-          - kafka.server:type=KafkaServer,name=ClusterId
+  - include:
+      # Uncomment when https://github.com/DataDog/jmxfetch/pull/277 is merged
+      # class_regex: .*$Gauge
+      domain_regex: kafka\..*
+      attribute:
+        Value:
+          alias: $domain.$type.$name
+          metric_type: gauge
+    exclude:
+      bean:
+        - kafka.server:type=SessionExpireListener,name=SessionState
+        - kafka.server:type=KafkaServer,name=ClusterId
+  - include:
+      # Uncomment when https://github.com/DataDog/jmxfetch/pull/277 is merged
+      # class_regex: .*$Meter
+      domain_regex: kafka\..*
+      attribute:
+        Count:
+          alias: $domain.$type.$name.count
+          metric_type: monotonic_count
+        MeanRate:
+          alias: $domain.$type.$name.mean_rate
+          metric_type: gauge
+        OneMinuteRate:
+          alias: $domain.$type.$name.one_minute_rate
+          metric_type: gauge
+        FiveMinuteRate:
+          alias: $domain.$type.$name.five_minute_rate
+          metric_type: gauge
+        FifteenMinuteRate:
+          alias: $domain.$type.$name.fifteen_minute_rate
+          metric_type: gauge
