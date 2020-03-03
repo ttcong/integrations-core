@@ -6,7 +6,7 @@ import pytest
 from six import iteritems
 
 from datadog_checks.base.stubs.aggregator import AggregatorStub
-from .common import ACTIVEMQ_E2E_METRICS
+from .metrics import build_metrics
 
 # https://docs.confluent.io/current/kafka/monitoring.html#broker-metrics
 
@@ -22,12 +22,21 @@ def test_e2e(dd_agent_check):
     instance = {}
     aggregator = dd_agent_check(instance)  # type: AggregatorStub
 
-    for metric in ALL_METRICS:
-        aggregator.assert_metric(metric)
+    # Mark jvm. metrics as asserted
+    for metric_name in aggregator._metrics:
+        if metric_name.startswith('jvm.'):
+            aggregator.assert_metric(metric_name)
 
-    for metric_name, metrics in iteritems(aggregator._metrics):
-        # print("{} => {}".format(metric_name, metrics))
+    for metric in build_metrics(checked_only=True):
+        metric_name = metric['metric_name']
         print(metric_name)
+        aggregator.assert_metric(metric_name)
+
+    aggregator.assert_all_metrics_covered()
+
+    # for metric_name, metrics in iteritems(aggregator._metrics):
+    #     # print("{} => {}".format(metric_name, metrics))
+    #     print(metric_name)
     1/0
     # # for metric in ACTIVEMQ_E2E_METRICS:
     #     aggregator.assert_metric(metric)
