@@ -2,7 +2,7 @@
 # All rights reserved
 # Licensed under a 3-clause BSD style license (see LICENSE)
 from datadog_checks.confluent_platform import ConfluentPlatformCheck
-from .common import build_metadata_csv
+from .metrics import build_metadata_csv
 
 
 def test_check(aggregator):
