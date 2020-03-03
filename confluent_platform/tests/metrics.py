@@ -98,6 +98,7 @@ ALL_MBEANS = [MBean(row['bean'], yammer_type=row['type'], desc=row['description'
 MBEANS_CONFIG = [
     {
         # Yammer Gauge
+        # https://metrics.dropwizard.io/2.2.0/apidocs/com/yammer/metrics/core/Gauge.html
         'alias': '$domain.$type.$name',
         'metrics': [
             Metric(GAUGE),
@@ -106,19 +107,41 @@ MBEANS_CONFIG = [
     },
     {
         # Yammer Meter
+        # https://metrics.dropwizard.io/2.2.0/apidocs/com/yammer/metrics/core/Meter.html
+        # Note:
+        # - `count` is monotonically increasing
         'alias': '$domain.$type.$name',
         'metrics': [
-            Metric(GAUGE, 'mean_rate'),
             Metric(COUNT, 'count'),
+            Metric(GAUGE, 'fifteen_minute_rate'),
+            Metric(GAUGE, 'five_minute_rate'),
+            Metric(GAUGE, 'one_minute_rate'),
+            Metric(GAUGE, 'mean_rate'),
         ],
         'beans': [b for b in ALL_MBEANS if b.yammer_type == 'YAMMER_METER']
     },
     {
         # Yammer Timer
+        # https://metrics.dropwizard.io/2.2.0/apidocs/com/yammer/metrics/core/Timer.html
+        # Note:
+        # - `count` is monotonically increasing
         'alias': '$domain.$type.$name',
         'metrics': [
-            Metric(GAUGE, 'avg'),
-            Metric(GAUGE, 'count'),
+            Metric(GAUGE, '50percentile'),
+            Metric(GAUGE, '75percentile'),
+            Metric(GAUGE, '95percentile'),
+            Metric(GAUGE, '98percentile'),
+            Metric(GAUGE, '99percentile'),
+            Metric(GAUGE, '999percentile'),
+            Metric(COUNT, 'count'),
+            Metric(GAUGE, 'fifteen_minute_rate'),
+            Metric(GAUGE, 'five_minute_rate'),
+            Metric(GAUGE, 'one_minute_rate'),
+            Metric(GAUGE, 'max'),
+            Metric(GAUGE, 'mean'),
+            Metric(GAUGE, 'mean_rate'),
+            Metric(GAUGE, 'min'),
+            Metric(GAUGE, 'std_dev'),
         ],
         'beans': [b for b in ALL_MBEANS if b.yammer_type == 'YAMMER_TIMER']
     },
