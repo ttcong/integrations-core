@@ -10,25 +10,26 @@ RATE = 'rate'
 COUNT = 'count'
 
 
-BROKER_METRICS = r'''bean	type	unit_name	description	check_metric
+BROKER_METRICS = r'''
+bean	type	unit_name	description	check_metric
 kafka.server:type=ReplicaManager,name=UnderMinIsrPartitionCount	YAMMER_GAUGE	partition	Number of partitions whose in-sync replicas count is less than minIsr.	TRUE
 kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions	YAMMER_GAUGE	partition	Number of under-replicated partitions (| ISR | < | all replicas |). Alert if value is greater than 0.	TRUE
 kafka.cluster:type=Partition,topic={topic},name=UnderMinIsr,partition={partition}	YAMMER_GAUGE	partition	Number of partitions whose in-sync replicas count is less than minIsr. These partitions will be unavailable to producers who use acks=all.	TRUE
 kafka.controller:type=KafkaController,name=OfflinePartitionsCount	YAMMER_GAUGE	partition	Number of partitions that don’t have an active leader and are hence not writable or readable. Alert if value is greater than 0.	TRUE
 kafka.controller:type=KafkaController,name=ActiveControllerCount	YAMMER_GAUGE		Number of active controllers in the cluster. Alert if the aggregated sum across all brokers in the cluster is anything other than 1 because there should be exactly one controller per cluster.	TRUE
 kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec	YAMMER_METER	byte	Aggregate incoming byte rate.	TRUE
-kafka.server:type=BrokerTopicMetrics,name=BytesOutPerSec	YAMMER_METER	byte	Aggregate outgoing byte rate.	FALSE
-kafka.network:type=RequestMetrics,name=RequestsPerSec,request={Produce|FetchConsumer|FetchFollower}	YAMMER_METER	request	Request rate.	FALSE
-kafka.server:type=BrokerTopicMetrics,name=TotalProduceRequestsPerSec	YAMMER_METER	request	Produce request rate.	FALSE
-kafka.server:type=BrokerTopicMetrics,name=TotalFetchRequestsPerSec	YAMMER_METER	request	Fetch request rate.	FALSE
-kafka.server:type=BrokerTopicMetrics,name=FailedProduceRequestsPerSec	YAMMER_METER	request	Produce request rate for requests that failed.	FALSE
-kafka.server:type=BrokerTopicMetrics,name=FailedFetchRequestsPerSec	YAMMER_METER	request	Fetch request rate for requests that failed.	FALSE
+kafka.server:type=BrokerTopicMetrics,name=BytesOutPerSec	YAMMER_METER	byte	Aggregate outgoing byte rate.	TRUE
+kafka.network:type=RequestMetrics,name=RequestsPerSec,request={Produce|FetchConsumer|FetchFollower}	YAMMER_METER	request	Request rate.	TRUE
+kafka.server:type=BrokerTopicMetrics,name=TotalProduceRequestsPerSec	YAMMER_METER	request	Produce request rate.	TRUE
+kafka.server:type=BrokerTopicMetrics,name=TotalFetchRequestsPerSec	YAMMER_METER	request	Fetch request rate.	TRUE
+kafka.server:type=BrokerTopicMetrics,name=FailedProduceRequestsPerSec	YAMMER_METER	request	Produce request rate for requests that failed.	TRUE
+kafka.server:type=BrokerTopicMetrics,name=FailedFetchRequestsPerSec	YAMMER_METER	request	Fetch request rate for requests that failed.	TRUE
 kafka.controller:type=ControllerStats,name=LeaderElectionRateAndTimeMs	YAMMER_TIMER		Leader election rate and latency.	FALSE
-kafka.controller:type=ControllerStats,name=UncleanLeaderElectionsPerSec	YAMMER_METER		Unclean leader election rate.	FALSE
+kafka.controller:type=ControllerStats,name=UncleanLeaderElectionsPerSec	YAMMER_METER		Unclean leader election rate.	TRUE
 kafka.server:type=ReplicaManager,name=PartitionCount	YAMMER_GAUGE	partition	Number of partitions on this broker. This should be mostly even across all brokers.	TRUE
 kafka.server:type=ReplicaManager,name=LeaderCount	YAMMER_GAUGE		Number of leaders on this broker. This should be mostly even across all brokers. If not, set auto.leader.rebalance.enable to true on all brokers in the cluster.	TRUE
 kafka.server:type=ReplicaFetcherManager,name=MaxLag,clientId=Replica	YAMMER_GAUGE	message	Maximum lag in messages between the follower and leader replicas. This is controlled by the replica.lag.max.messages config.	TRUE
-kafka.server:type=KafkaRequestHandlerPool,name=RequestHandlerAvgIdlePercent	YAMMER_METER	fraction	Average fraction of time the request handler threads are idle. Values are between 0 (all resources are used) and 1 (all resources are available)	FALSE
+kafka.server:type=KafkaRequestHandlerPool,name=RequestHandlerAvgIdlePercent	YAMMER_METER	fraction	Average fraction of time the request handler threads are idle. Values are between 0 (all resources are used) and 1 (all resources are available)	TRUE
 kafka.network:type=SocketServer,name=NetworkProcessorAvgIdlePercent	YAMMER_GAUGE	fraction	Average fraction of time the network processor threads are idle. Values are between 0 (all resources are used) and 1 (all resources are available)	TRUE
 kafka.network:type=RequestChannel,name=RequestQueueSize	YAMMER_GAUGE	request	Size of the request queue. A congested request queue will not be able to process incoming or outgoing requests	TRUE
 kafka.network:type=RequestMetrics,name=TotalTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_HISTOGRAM	millisecond	Total time in ms to serve the specified request	TRUE
@@ -37,13 +38,14 @@ kafka.network:type=RequestMetrics,name=LocalTimeMs,request={Produce|FetchConsume
 kafka.network:type=RequestMetrics,name=RemoteTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_HISTOGRAM	millisecond	Time the request waits for the follower. This is non-zero for produce requests when acks=all	TRUE
 kafka.network:type=RequestMetrics,name=ResponseQueueTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_HISTOGRAM	millisecond	Time the request waits in the response queue	TRUE
 kafka.network:type=RequestMetrics,name=ResponseSendTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_HISTOGRAM	millisecond	Time to send the response	TRUE
-kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec	YAMMER_METER	message	Aggregate incoming message rate.	FALSE
+kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec	YAMMER_METER	message	Aggregate incoming message rate.	TRUE
 kafka.log:type=LogFlushStats,name=LogFlushRateAndTimeMs	YAMMER_TIMER	flush	Log flush rate and time.	FALSE
-kafka.server:type=ReplicaManager,name=IsrShrinksPerSec	YAMMER_METER		If a broker goes down, ISR for some of the partitions will shrink. When that broker is up again, ISR will be expanded once the replicas are fully caught up. Other than that, the expected value for both ISR shrink rate and expansion rate is 0.	FALSE
-kafka.server:type=ReplicaManager,name=IsrExpandsPerSec	YAMMER_METER		When a broker is brought up after a failure, it starts catching up by reading from the leader. Once it is caught up, it gets added back to the ISR.	FALSE
+kafka.server:type=ReplicaManager,name=IsrShrinksPerSec	YAMMER_METER		If a broker goes down, ISR for some of the partitions will shrink. When that broker is up again, ISR will be expanded once the replicas are fully caught up. Other than that, the expected value for both ISR shrink rate and expansion rate is 0.	TRUE
+kafka.server:type=ReplicaManager,name=IsrExpandsPerSec	YAMMER_METER		When a broker is brought up after a failure, it starts catching up by reading from the leader. Once it is caught up, it gets added back to the ISR.	TRUE
 kafka.server:type=FetcherLagMetrics,name=ConsumerLag,clientId=([-.\w]+),topic=([-.\w]+),partition=([0-9]+)	YAMMER_GAUGE	message	Lag in number of messages per follower replica. This is useful to know if the replica is slow or has stopped replicating from the leader.	FALSE
 kafka.server:type=DelayedOperationPurgatory,delayedOperation=Produce,name=PurgatorySize	YAMMER_GAUGE	request	Number of requests waiting in the producer purgatory. This should be non-zero when acks=all is used on the producer.	TRUE
-kafka.server:type=DelayedOperationPurgatory,delayedOperation=Fetch,name=PurgatorySize	YAMMER_GAUGE	request	Number of requests waiting in the fetch purgatory. This is high if consumers use a large value for fetch.wait.max.ms .	TRUE'''
+kafka.server:type=DelayedOperationPurgatory,delayedOperation=Fetch,name=PurgatorySize	YAMMER_GAUGE	request	Number of requests waiting in the fetch purgatory. This is high if consumers use a large value for fetch.wait.max.ms .	TRUE
+'''.strip()
 
 YAMMER_METRICS = BROKER_METRICS
 
