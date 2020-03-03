@@ -1,8 +1,9 @@
 # Default metrics collected by this check. You should not have to modify this.
 jmx_metrics:
   - include:
-      # class?
-      # class_regex?
+      # Uncomment when https://github.com/DataDog/jmxfetch/pull/277 is merged
+      # class_regex: .*$Gauge
+      domain_regex: kafka\..*
       attribute:
         Value:
           alias: $domain.$type.$name
@@ -16,7 +17,6 @@ jmx_metrics:
         Mean:
           alias: $domain.$type.$name.avg
           metric_type: gauge
-      domain_regex: kafka\.(server|controller)
     exclude:
       bean:
         - kafka.server:type=SessionExpireListener,name=SessionState
