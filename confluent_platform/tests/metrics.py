@@ -31,12 +31,12 @@ kafka.server:type=ReplicaFetcherManager,name=MaxLag,clientId=Replica	YAMMER_GAUG
 kafka.server:type=KafkaRequestHandlerPool,name=RequestHandlerAvgIdlePercent	YAMMER_METER	Average fraction of time the request handler threads are idle. Values are between 0 (all resources are used) and 1 (all resources are available)
 kafka.network:type=SocketServer,name=NetworkProcessorAvgIdlePercent	YAMMER_GAUGE	Average fraction of time the network processor threads are idle. Values are between 0 (all resources are used) and 1 (all resources are available)
 kafka.network:type=RequestChannel,name=RequestQueueSize	YAMMER_GAUGE	Size of the request queue. A congested request queue will not be able to process incoming or outgoing requests
-kafka.network:type=RequestMetrics,name=TotalTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_TIMER	Total time in ms to serve the specified request
-kafka.network:type=RequestMetrics,name=RequestQueueTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_TIMER	Time the request waits in the request queue
-kafka.network:type=RequestMetrics,name=LocalTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_TIMER	Time the request is processed at the leader
-kafka.network:type=RequestMetrics,name=RemoteTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_TIMER	Time the request waits for the follower. This is non-zero for produce requests when acks=all
-kafka.network:type=RequestMetrics,name=ResponseQueueTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_TIMER	Time the request waits in the response queue
-kafka.network:type=RequestMetrics,name=ResponseSendTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_TIMER	Time to send the response
+kafka.network:type=RequestMetrics,name=TotalTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_HISTOGRAM	Total time in ms to serve the specified request
+kafka.network:type=RequestMetrics,name=RequestQueueTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_HISTOGRAM	Time the request waits in the request queue
+kafka.network:type=RequestMetrics,name=LocalTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_HISTOGRAM	Time the request is processed at the leader
+kafka.network:type=RequestMetrics,name=RemoteTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_HISTOGRAM	Time the request waits for the follower. This is non-zero for produce requests when acks=all
+kafka.network:type=RequestMetrics,name=ResponseQueueTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_HISTOGRAM	Time the request waits in the response queue
+kafka.network:type=RequestMetrics,name=ResponseSendTimeMs,request={Produce|FetchConsumer|FetchFollower}	YAMMER_HISTOGRAM	Time to send the response
 kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec	YAMMER_METER	Aggregate incoming message rate.
 kafka.log:type=LogFlushStats,name=LogFlushRateAndTimeMs	YAMMER_TIMER	Log flush rate and time.
 kafka.server:type=ReplicaManager,name=IsrShrinksPerSec	YAMMER_METER	If a broker goes down, ISR for some of the partitions will shrink. When that broker is up again, ISR will be expanded once the replicas are fully caught up. Other than that, the expected value for both ISR shrink rate and expansion rate is 0.
@@ -56,7 +56,7 @@ class Attribute:
 
 
 class Metric:
-    def __init__(self, suffix, metric_type, unit_name='', orientation=0):
+    def __init__(self, metric_type, suffix=None, unit_name='', orientation=0):
         self.suffix = suffix
         self.metric_type = metric_type
         self.unit_name = unit_name
@@ -89,10 +89,9 @@ class MBean:
         alias = alias.replace('$name', camel_to_snake(self.props['name']))
         return alias
 
-reader = csv.DictReader(io.StringIO(YAMMER_METRICS), delimiter='\t')
-
 
 # flatten structure
+reader = csv.DictReader(io.StringIO(YAMMER_METRICS), delimiter='\t')
 ALL_MBEANS = [MBean(row['bean'], yammer_type=row['type'], desc=row['description']) for row in reader if row]
 
 
@@ -101,7 +100,7 @@ MBEANS_CONFIG = [
         # Yammer Gauge
         'alias': '$domain.$type.$name',
         'metrics': [
-            Metric('', GAUGE),
+            Metric(GAUGE),
         ],
         'beans': [b for b in ALL_MBEANS if b.yammer_type == 'YAMMER_GAUGE']
     },
@@ -109,18 +108,17 @@ MBEANS_CONFIG = [
         # Yammer Meter
         'alias': '$domain.$type.$name',
         'metrics': [
-            Metric('avg', GAUGE),
-            Metric('count', GAUGE),
+            Metric(GAUGE, 'mean_rate'),
+            Metric(COUNT, 'count'),
         ],
         'beans': [b for b in ALL_MBEANS if b.yammer_type == 'YAMMER_METER']
     },
-
     {
         # Yammer Timer
         'alias': '$domain.$type.$name',
         'metrics': [
-            Metric('avg', GAUGE),
-            Metric('count', GAUGE),
+            Metric(GAUGE, 'avg'),
+            Metric(GAUGE, 'count'),
         ],
         'beans': [b for b in ALL_MBEANS if b.yammer_type == 'YAMMER_TIMER']
     },
