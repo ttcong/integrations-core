@@ -19,10 +19,10 @@ bean,type,unit_name,description,check_metric
 "kafka.server:type=KafkaRequestHandlerPool,name=RequestHandlerAvgIdlePercent",YAMMER_METER,fraction,Average fraction of time the request handler threads are idle. Values are between 0 (all resources are used) and 1 (all resources are available),TRUE
 "kafka.network:type=SocketServer,name=NetworkProcessorAvgIdlePercent",YAMMER_GAUGE,fraction,Average fraction of time the network processor threads are idle. Values are between 0 (all resources are used) and 1 (all resources are available),TRUE
 "kafka.network:type=RequestChannel,name=RequestQueueSize",YAMMER_GAUGE,request,Size of the request queue. A congested request queue will not be able to process incoming or outgoing requests,TRUE
-"kafka.network:type=RequestMetrics,name=TotalTimeMs,request={Produce|FetchConsumer|FetchFollower}",YAMMER_HISTOGRAM,millisecond,Total time in ms to serve the specified request,TRUE
-"kafka.network:type=RequestMetrics,name=RequestQueueTimeMs,request={Produce|FetchConsumer|FetchFollower}",YAMMER_HISTOGRAM,millisecond,Time the request waits in the request queue,TRUE
-"kafka.network:type=RequestMetrics,name=LocalTimeMs,request={Produce|FetchConsumer|FetchFollower}",YAMMER_HISTOGRAM,millisecond,Time the request is processed at the leader,TRUE
-"kafka.network:type=RequestMetrics,name=RemoteTimeMs,request={Produce|FetchConsumer|FetchFollower}",YAMMER_HISTOGRAM,millisecond,Time the request waits for the follower. This is non-zero for produce requests when acks=all,TRUE
+"kafka.network:type=RequestMetrics,name=TotalTimeMs",YAMMER_HISTOGRAM,millisecond,Total time in ms to serve the specified request (request={Produce|FetchConsumer|FetchFollower|...}),TRUE
+"kafka.network:type=RequestMetrics,name=RequestQueueTimeMs",YAMMER_HISTOGRAM,millisecond,Time the request waits in the request queue (request={Produce|FetchConsumer|FetchFollower|...}),TRUE
+"kafka.network:type=RequestMetrics,name=LocalTimeMs",YAMMER_HISTOGRAM,millisecond,Time the request is processed at the leader (request={Produce|FetchConsumer|FetchFollower|...}),TRUE
+"kafka.network:type=RequestMetrics,name=RemoteTimeMs",YAMMER_HISTOGRAM,millisecond,Time the request waits for the follower. This is non-zero for produce requests when acks=all (request={Produce|FetchConsumer|FetchFollower|...}),TRUE
 "kafka.network:type=RequestMetrics,name=ResponseQueueTimeMs,request={Produce|FetchConsumer|FetchFollower}",YAMMER_HISTOGRAM,millisecond,Time the request waits in the response queue,TRUE
 "kafka.network:type=RequestMetrics,name=ResponseSendTimeMs,request={Produce|FetchConsumer|FetchFollower}",YAMMER_HISTOGRAM,millisecond,Time to send the response,TRUE
 "kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec",YAMMER_METER,message,Aggregate incoming message rate.,TRUE

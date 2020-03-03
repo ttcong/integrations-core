@@ -50,10 +50,10 @@ class MBean:
         return domain, props
 
     def get_metric_name(self, alias):
-        alias = alias.replace('$domain', camel_to_snake(self.domain))
-        alias = alias.replace('$type', camel_to_snake(self.props['type']))
-        alias = alias.replace('$name', camel_to_snake(self.props['name']))
-        return alias
+        metric_name = alias.replace('$domain', camel_to_snake(self.domain))
+        metric_name = metric_name.replace('$type', camel_to_snake(self.props['type']))
+        metric_name = metric_name.replace('$name', camel_to_snake(self.props['name']))
+        return metric_name
 
 
 def get_beans_config():
@@ -87,7 +87,7 @@ def get_beans_config():
             # - `count` is monotonically increasing
             'alias': '$domain.$type.$name',
             'metrics': [
-                Metric(COUNT, 'count', check_metric=False),  # Seems `agent check` doesn't return jmx count metrics
+                Metric(COUNT, 'count', check_metric=False),  # `agent check` doesn't return jmx count metrics yet
                 Metric(GAUGE, 'fifteen_minute_rate', per_unit_name='second'),
                 Metric(GAUGE, 'five_minute_rate', per_unit_name='second'),
                 Metric(GAUGE, 'one_minute_rate', per_unit_name='second'),
@@ -102,7 +102,7 @@ def get_beans_config():
             # - `count` is monotonically increasing
             'alias': '$domain.$type.$name',
             'metrics': [
-                Metric(COUNT, 'count', check_metric=False),  # Seems `agent check` doesn't return jmx count metrics
+                Metric(COUNT, 'count', check_metric=False),  # `agent check` doesn't return jmx count metrics yet
                 Metric(GAUGE, '50percentile', per_unit_name='second'),
                 Metric(GAUGE, '75percentile', per_unit_name='second'),
                 Metric(GAUGE, '95percentile', per_unit_name='second'),
@@ -119,6 +119,27 @@ def get_beans_config():
                 Metric(GAUGE, 'std_dev', per_unit_name='second'),
             ],
             'beans': [b for b in all_beans if b.yammer_type == 'YAMMER_TIMER']
+        },
+        {
+            # Yammer Histogram
+            # https://metrics.dropwizard.io/2.2.0/apidocs/com/yammer/metrics/core/Histogram.html
+            # Note:
+            # - `count` is monotonically increasing
+            'alias': '$domain.$type.$name',
+            'metrics': [
+                Metric(COUNT, 'count', check_metric=False),  # `agent check` doesn't return jmx count metrics yet
+                Metric(GAUGE, '50percentile', per_unit_name='second'),
+                Metric(GAUGE, '75percentile', per_unit_name='second'),
+                Metric(GAUGE, '95percentile', per_unit_name='second'),
+                Metric(GAUGE, '98percentile', per_unit_name='second'),
+                Metric(GAUGE, '99percentile', per_unit_name='second'),
+                Metric(GAUGE, '999percentile', per_unit_name='second'),
+                Metric(GAUGE, 'max', per_unit_name='second'),
+                Metric(GAUGE, 'mean', per_unit_name='second'),
+                Metric(GAUGE, 'min', per_unit_name='second'),
+                Metric(GAUGE, 'std_dev', per_unit_name='second'),
+            ],
+            'beans': [b for b in all_beans if b.yammer_type == 'YAMMER_HISTOGRAM']
         },
     ]
 
