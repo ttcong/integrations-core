@@ -1,1 +1,5 @@
 metric_name,metric_type,interval,unit_name,per_unit_name,description,orientation,integration,short_name
+kafka.server.replica_manager.under_min_isr_partition_count.avg,gauge,,,,Number of partitions whose in-sync replicas count is less than minIsr.,,,
+kafka.server.replica_manager.under_min_isr_partition_count.count,gauge,,,,Number of partitions whose in-sync replicas count is less than minIsr.,,,
+kafka.server.replica_manager.under_replicated_partitions.avg,gauge,,,,Number of under-replicated partitions (| ISR | < | all replicas |). Alert if value is greater than 0.,,,
+kafka.server.replica_manager.under_replicated_partitions.count,gauge,,,,Number of under-replicated partitions (| ISR | < | all replicas |). Alert if value is greater than 0.,,,

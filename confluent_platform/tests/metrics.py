@@ -4,23 +4,29 @@
 import csv
 import io
 import re
-import sys
-
 
 TYPE_GAUGE = 'com.yammer.metrics.reporting.JmxReporter$Gauge'
 TYPE_KAFKA_MBEAN = 'com.yammer.metrics.reporting.JmxReporter$Gauge'
 
 
-class Attribute(object):
+class Attribute:
     def __init__(self, name, check_metric=True):
         self.name = name
         self.check_metric = check_metric
 
 
-class MBean(object):
-    def __init__(self, bean_name, clazz, attrs=None, check_metric=True):
+class Metric:
+    def __init__(self, suffix, unit_name='', orientation=0):
+        self.suffix = suffix
+        self.unit_name = unit_name
+        self.orientation = orientation
+
+
+class MBean:
+    def __init__(self, bean_name, clazz, desc='', attrs=None, check_metric=True):
         self.bean_name = bean_name
         self.clazz = clazz
+        self.desc = desc
         self.attrs = attrs
         self.check_metric = check_metric
         self.domain, self.props = self._parse_name(bean_name)
@@ -46,10 +52,13 @@ class MBean(object):
 MBEANS = [
     {
         'alias': '$domain.$type.$name',
-        'suffixes': ['avg', 'count'],
+        'metrics': [
+            Metric('avg'),
+            Metric('count'),
+        ],
         'beans': [
-            MBean('kafka.server:type=ReplicaManager,name=UnderMinIsrPartitionCount', TYPE_GAUGE),
-            MBean('kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions', TYPE_GAUGE),
+            MBean('kafka.server:type=ReplicaManager,name=UnderMinIsrPartitionCount', TYPE_GAUGE, desc='Number of partitions whose in-sync replicas count is less than minIsr.'),
+            MBean('kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions', TYPE_GAUGE, desc='Number of under-replicated partitions (| ISR | < | all replicas |). Alert if value is greater than 0.'),
         ]
     }
     # MBean('kafka.cluster:type=Partition,topic={topic},name=UnderMinIsr,partition={partition}', attrs=[
@@ -61,24 +70,25 @@ MBEANS = [
 def build_metadata_csv():
     headers = 'metric_name,metric_type,interval,unit_name,per_unit_name,description,orientation,integration,short_name'.split(',')
     out = io.StringIO()
-    writer = csv.DictWriter(out, fieldnames=headers)
+    writer = csv.DictWriter(out, fieldnames=headers, lineterminator='\n')
     writer.writeheader()
 
     def write_metric(metric_name, bean):
         writer.writerow({
             'metric_name': metric_name,
             'metric_type': 'gauge',
+            'description': bean.desc,
         })
 
     for group in MBEANS:
         alias = group['alias']
-        suffixes = group['suffixes']
-        for bean in group['beans']:
-            if suffixes:
-                for suffix in suffixes:
-                    write_metric("{}.{}".format(bean.get_metric_name(alias), suffix), bean)
+        metrics = group['metrics']
+        for mbean in group['beans']:  # type: MBean
+            if metrics:
+                for metric in metrics:
+                    write_metric("{}.{}".format(mbean.get_metric_name(alias), metric.suffix), mbean)
             else:
-                write_metric(bean.get_metric_name(alias), bean)
+                write_metric(mbean.get_metric_name(alias), mbean)
     content = out.getvalue()
     out.close()
     return content
