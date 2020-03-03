@@ -57,28 +57,38 @@ MBEANS = [
             Metric('count'),
         ],
         'beans': [
-            MBean('kafka.server:type=ReplicaManager,name=UnderMinIsrPartitionCount', TYPE_GAUGE, desc='Number of partitions whose in-sync replicas count is less than minIsr.'),
-            MBean('kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions', TYPE_GAUGE, desc='Number of under-replicated partitions (| ISR | < | all replicas |). Alert if value is greater than 0.'),
+            MBean('kafka.server:type=ReplicaManager,name=UnderMinIsrPartitionCount', TYPE_GAUGE,
+                  desc='Number of partitions whose in-sync replicas count is less than minIsr.'),
+            MBean('kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions', TYPE_GAUGE,
+                  desc='Number of under-replicated partitions (| ISR | < | all replicas |). Alert if value is greater than 0.'),
         ]
     }
-    # MBean('kafka.cluster:type=Partition,topic={topic},name=UnderMinIsr,partition={partition}', attrs=[
-    #     Attribute('hello')
-    # ], clazz=TYPE_KAFKA_MBEAN),
 ]
 
 
-def build_metadata_csv():
-    headers = 'metric_name,metric_type,interval,unit_name,per_unit_name,description,orientation,integration,short_name'.split(',')
+def build_row(metric_name, bean, current_metrics):
+    current_metric = current_metrics.get(metric_name)
+    new_row = {
+        'metric_name': metric_name,
+        'metric_type': 'gauge',
+        'description': bean.desc,
+    }
+    if current_metric:
+        for field in ['unit_name', 'orientation']:
+            new_row[field] = current_metric[field]
+    return new_row
+
+
+def build_metadata_csv(orig_metadata):
+    reader = csv.DictReader(io.StringIO(orig_metadata))
+    current_metrics = {}
+    for row in reader:
+        current_metrics[row['metric_name']] = row
+
+    headers = reader.fieldnames
     out = io.StringIO()
     writer = csv.DictWriter(out, fieldnames=headers, lineterminator='\n')
     writer.writeheader()
-
-    def write_metric(metric_name, bean):
-        writer.writerow({
-            'metric_name': metric_name,
-            'metric_type': 'gauge',
-            'description': bean.desc,
-        })
 
     for group in MBEANS:
         alias = group['alias']
@@ -86,9 +96,11 @@ def build_metadata_csv():
         for mbean in group['beans']:  # type: MBean
             if metrics:
                 for metric in metrics:
-                    write_metric("{}.{}".format(mbean.get_metric_name(alias), metric.suffix), mbean)
+                    metric_name = "{}.{}".format(mbean.get_metric_name(alias), metric.suffix)
+                    writer.writerow(build_row(metric_name, mbean, current_metrics))
             else:
-                write_metric(mbean.get_metric_name(alias), mbean)
+                writer.writerow(build_row(mbean.get_metric_name(alias), mbean, current_metrics))
+
     content = out.getvalue()
     out.close()
     return content
