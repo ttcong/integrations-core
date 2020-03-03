@@ -11,7 +11,7 @@ bean,type,unit_name,description,check_metric
 "kafka.server:type=BrokerTopicMetrics,name=TotalFetchRequestsPerSec",YAMMER_METER,request,Fetch request rate.,TRUE
 "kafka.server:type=BrokerTopicMetrics,name=FailedProduceRequestsPerSec",YAMMER_METER,request,Produce request rate for requests that failed.,TRUE
 "kafka.server:type=BrokerTopicMetrics,name=FailedFetchRequestsPerSec",YAMMER_METER,request,Fetch request rate for requests that failed.,TRUE
-"kafka.controller:type=ControllerStats,name=LeaderElectionRateAndTimeMs",YAMMER_TIMER,,Leader election rate and latency.,FALSE
+"kafka.controller:type=ControllerStats,name=LeaderElectionRateAndTimeMs",YAMMER_TIMER,,Leader election rate and latency.,TRUE
 "kafka.controller:type=ControllerStats,name=UncleanLeaderElectionsPerSec",YAMMER_METER,,Unclean leader election rate.,TRUE
 "kafka.server:type=ReplicaManager,name=PartitionCount",YAMMER_GAUGE,partition,Number of partitions on this broker. This should be mostly even across all brokers.,TRUE
 "kafka.server:type=ReplicaManager,name=LeaderCount",YAMMER_GAUGE,,"Number of leaders on this broker. This should be mostly even across all brokers. If not, set auto.leader.rebalance.enable to true on all brokers in the cluster.",TRUE

@@ -183,3 +183,53 @@ init_config:
         FifteenMinuteRate:
           alias: $domain.$type.$name.fifteen_minute_rate
           metric_type: gauge
+  - include:
+      # Uncomment when https://github.com/DataDog/jmxfetch/pull/277 is merged
+      # class_regex: .*$Meter
+      domain_regex: kafka\..*
+      attribute:
+        Count:
+          alias: $domain.$type.$name.count
+          metric_type: monotonic_count
+        50thPercentile:
+          alias: $domain.$type.$name.50percentile
+          metric_type: gauge
+        75thPercentile:
+          alias: $domain.$type.$name.75percentile
+          metric_type: gauge
+        95thPercentile:
+          alias: $domain.$type.$name.95percentile
+          metric_type: gauge
+        98thPercentile:
+          alias: $domain.$type.$name.98percentile
+          metric_type: gauge
+        99thPercentile:
+          alias: $domain.$type.$name.99percentile
+          metric_type: gauge
+        999thPercentile:
+          alias: $domain.$type.$name.999percentile
+          metric_type: gauge
+        OneMinuteRate:
+          alias: $domain.$type.$name.one_minute_rate
+          metric_type: gauge
+        FiveMinuteRate:
+          alias: $domain.$type.$name.five_minute_rate
+          metric_type: gauge
+        FifteenMinuteRate:
+          alias: $domain.$type.$name.fifteen_minute_rate
+          metric_type: gauge
+        Max:
+          alias: $domain.$type.$name.max
+          metric_type: gauge
+        Min:
+          alias: $domain.$type.$name.min
+          metric_type: gauge
+        Mean:
+          alias: $domain.$type.$name.mean
+          metric_type: gauge
+        MeanRate:
+          alias: $domain.$type.$name.mean_rate
+          metric_type: gauge
+        StdDev:
+          alias: $domain.$type.$name.std_dev
+          metric_type: gauge

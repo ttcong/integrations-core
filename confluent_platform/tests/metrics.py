@@ -58,17 +58,17 @@ class MBean:
 
 def get_beans_config():
     all_beans = []
-    with open(os.path.join(HERE, 'metrics', 'broker.csv'), 'r') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            print(row)
-            check_metric = row['check_metric'] == 'TRUE'
-            bean = MBean(row['bean'],
-                         yammer_type=row['type'],
-                         unit_name=row['unit_name'],
-                         desc=row['description'],
-                         check_metric=check_metric)
-            all_beans.append(bean)
+    for component in ['broker']:
+        with open(os.path.join(HERE, 'metrics', '{}.csv'.format(component)), 'r') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                check_metric = row['check_metric'] == 'TRUE'
+                bean = MBean(row['bean'],
+                             yammer_type=row['type'],
+                             unit_name=row['unit_name'],
+                             desc=row['description'],
+                             check_metric=check_metric)
+                all_beans.append(bean)
 
     return [
         {
