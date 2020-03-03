@@ -162,6 +162,7 @@ def build_row(metric, alias, bean, current_metrics):
         'metric_type': metric.metric_type,
         'description': desc,
         'unit_name': bean.unit_name,
+        'integration': 'confluent_platform',
     }
     if current_metric:
         for field in ['orientation']:
