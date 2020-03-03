@@ -163,9 +163,9 @@ def build_row(metric, alias, bean, current_metrics):
         'description': desc,
         'unit_name': bean.unit_name,
     }
-    # if current_metric:
-    #     for field in ['unit_name', 'orientation']:
-    #         new_row[field] = current_metric[field]
+    if current_metric:
+        for field in ['orientation']:
+            new_row[field] = current_metric[field]
     return new_row
 
 
