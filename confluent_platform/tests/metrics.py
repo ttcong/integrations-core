@@ -2,6 +2,7 @@
 # All rights reserved
 # Licensed under a 3-clause BSD style license (see LICENSE)
 import csv
+import io
 import re
 import sys
 
@@ -59,7 +60,8 @@ MBEANS = [
 
 def build_metadata_csv():
     headers = 'metric_name,metric_type,interval,unit_name,per_unit_name,description,orientation,integration,short_name'.split(',')
-    writer = csv.DictWriter(sys.stdout, fieldnames=headers)
+    out = io.StringIO()
+    writer = csv.DictWriter(out, fieldnames=headers)
     writer.writeheader()
 
     def write_metric(metric_name, bean):
@@ -77,6 +79,9 @@ def build_metadata_csv():
                     write_metric("{}.{}".format(bean.get_metric_name(alias), suffix), bean)
             else:
                 write_metric(bean.get_metric_name(alias), bean)
+    content = out.getvalue()
+    out.close()
+    return content
 
 
 def camel_to_snake(name):
