@@ -26,5 +26,3 @@ def test_metadata_csv():
     print("=== END")
 
     assert expected_metadata_csv == actual_metadata_csv
-
-    1/0
