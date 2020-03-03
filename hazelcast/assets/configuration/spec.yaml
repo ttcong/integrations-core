@@ -1,0 +1,48 @@
+name: Hazelcast
+files:
+- name: hazelcast.yaml
+  options:
+  - template: instances
+    options:
+    - name: host
+      required: true
+      description: The server with which to connect.
+      value:
+        example: localhost
+        type: string
+    - name: port
+      required: true
+      description: The port on `server` with which to connect.
+      value:
+        example: 1099
+        type: integer
+    - template: instances/default
+  - template: init_config
+    options:
+    - name: is_jmx
+      required: true
+      description: Whether or not this file is a configuration for a JMX integration.
+      value:
+        example: true
+        type: boolean
+    - name: collect_default_metrics
+      required: true
+      description: Whether or not the check should collect all default metrics.
+      value:
+        example: true
+        type: boolean
+    - template: init_config/default
+- name: metrics.yaml
+  example_name: metrics.yaml
+  options:
+  - name: jmx_metrics
+    description: |
+      Default metrics collected by this check. You should not have to modify this.
+      See Cassandra's metrics.yaml as an example:
+      https://github.com/DataDog/integrations-core/blob/master/cassandra/datadog_checks/cassandra/data/metrics.yaml
+    value:
+      example: []
+      type: array
+      items:
+        type: object
+        properties: []
